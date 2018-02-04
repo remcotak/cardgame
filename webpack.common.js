@@ -4,7 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: './src/client/js/client.js',
+  entry: './src/client-side/js/client.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -12,7 +12,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/client/index.html')
+      template: path.resolve(__dirname, 'src/client-side/index.html')
     }),
     new ExtractTextPlugin('styles.css'),
   ],
