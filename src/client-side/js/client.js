@@ -3,6 +3,7 @@ import styles from '../css/styles.css';
 const socket = io();
 const drawCard = document.querySelector('[data-component="draw-card"]');
 const cards = document.querySelector('.cards');
+const deck = document.querySelector('.deck');
 
 drawCard.addEventListener('click', function () {
   console.log('clicked');
@@ -15,7 +16,13 @@ socket.on('socketID', function (data) {
 
 socket.on('update', function (state) {
   console.log(state);
-  state.forEach(card => {
-    cards.innerHTML = card;
+  cards.innerHTML = '';
+  deck.innerHTML = '';
+
+  state.deck.forEach(card => {
+    deck.innerHTML += `<li>${card}</li>`;
+  });
+  state.cards.forEach(card => {
+    cards.innerHTML += `<li>${card}</li>`;
   });
 })

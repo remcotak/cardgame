@@ -19,14 +19,18 @@ server.listen(5000, function () {
 // Add the WebSocket handlers
 io.on('connection', function (socket) {
   console.log(`Client connected with id: ${socket.id}`);
-  io.sockets.emit('socketID', socket.id);
+  socket.emit('socketID', socket.id);
 
   game.addNewPlayer(socket);
-  game.sendState();
-
-  console.log(game.deck);
 
   socket.on('draw-card', function () {
-    game.drawCard();
+    game.drawCard(socket.id);
+    game.sendState();
+  });
+
+  // When a player disconnects, remove them from the game.
+  socket.on('disconnect', function () {
+    console.log(`Client disconnected with id: ${socket.id}`);
+    game.removePlayer(socket.id);
   });
 });
