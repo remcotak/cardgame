@@ -4,6 +4,7 @@ const socket = io();
 const drawCard = document.querySelector('[data-component="draw-card"]');
 const cards = document.querySelector('.cards');
 const deck = document.querySelector('.deck');
+const burned = document.querySelector('.burned');
 
 drawCard.addEventListener('click', function () {
   console.log('clicked');
@@ -18,11 +19,15 @@ socket.on('update', function (state) {
   console.log(state);
   cards.innerHTML = '';
   deck.innerHTML = '';
+  burned.innerHTML = '';
 
   state.deck.forEach(card => {
     deck.innerHTML += `<li>${card}</li>`;
   });
   state.cards.forEach(card => {
     cards.innerHTML += `<li>${card}</li>`;
+  });
+  state.burned.forEach(card => {
+    burned.innerHTML += `<li>${card}</li>`;
   });
 })
