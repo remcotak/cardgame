@@ -9,16 +9,28 @@
   </head>
   <body>
     <h1 class="header__title">Cardgame</h1>
+    <div><button data-component="start-game">Start game</button></div>
+    <button data-component="draw-card">Draw card</button>
+    <button data-component="play-card">Play card</button>
+  
+    <h3>Connected as:</h3>
+    <div class="socket-id"></div>
+
+    <h3>Connected players:</h3>
+    <ul class="connected"></ul>
 
     <h3>Player's hand:</h3>
-    <ul class="cards"></ul>
+    <div class="cards"></div>
 
     <h3>Game Deck:</h3>
     <ul class="deck"></ul>
 
     <h3>Burned:</h3>
     <ul class="burned"></ul>
-    <button data-component="draw-card">Draw card</button>
+
+    <h3>Played:</h3>
+    <ul class="played"></ul>
+
     <script src="/socket.io/socket.io.js"></script>
   </body>
 </html>

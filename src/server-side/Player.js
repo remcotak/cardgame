@@ -6,7 +6,17 @@ function Player(socket) {
 };
 
 Player.prototype.addCard = function (card) {
-  return this.cards.push(card);
+  this.cards.push(card);
+}
+
+Player.prototype.removeCard = function (card) {
+  const cardIndex = this.cards.indexOf(card);
+  this.cards.splice(cardIndex, 1);
+}
+
+Player.prototype.hasCard = function (card) {
+  console.log(this.cards);
+  return this.cards.includes(card);
 }
 
 Player.prototype.canDraw = function () {

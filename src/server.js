@@ -9,11 +9,11 @@ const server = http.Server(app);
 const io = socketIO(server);
 const game = new Game();
 
-app.set('port', 5000);
+app.set('port', 3000);
 app.use(express.static('../dist'));
 // Starts the server.
-server.listen(5000, function () {
-  console.log('Starting server on port 5000');
+server.listen(3000, function () {
+  console.log('Starting server on port 3000');
 });
 
 // Add the WebSocket handlers
@@ -24,7 +24,13 @@ io.on('connection', function (socket) {
   game.addNewPlayer(socket);
 
   socket.on('draw-card', function () {
+    console.log('draw card for: ', socket.id);
     game.drawCard(socket.id);
+    game.sendState();
+  });
+
+  socket.on('play-card', function (card) {
+    game.playCard(socket.id, card);
     game.sendState();
   });
 
