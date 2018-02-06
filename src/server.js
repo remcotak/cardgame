@@ -2,11 +2,15 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketIO = require('socket.io');
+const Hashids = require('hashids');
 const Game = require('./server-side/Game');
 
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
+const hashids = new Hashids('', 5);
+let gamesCount = 0;
+const games = {};
 const game = new Game();
 
 app.set('port', 3000);
@@ -21,7 +25,14 @@ io.on('connection', function (socket) {
   console.log(`Client connected with id: ${socket.id}`);
   socket.emit('socketID', socket.id);
 
-  game.addNewPlayer(socket);
+  game.addNewPlayer(socket, 'test');
+
+  socket.on('start-game', function (data, callback) {
+    gamesCount += 1;
+    const id = hashids.encode(gamesCount)
+    games[id] = new Game();
+    callback(games);
+  });
 
   socket.on('draw-card', function () {
     console.log('draw card for: ', socket.id);

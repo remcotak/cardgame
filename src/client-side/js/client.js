@@ -1,57 +1,26 @@
 import styles from '../css/styles.css';
+import events from './game/events';
+import view from './game/view';
 
+// Init socket
 const socket = io();
-const startGame = document.querySelector('[data-component="start-game"]');
-const drawCard = document.querySelector('[data-component="draw-card"]');
-const playCard = document.querySelector('[data-component="play-card"]');
-const socketId = document.querySelector('.socket-id');
-const connectedPlayers = document.querySelector('.connected');
-const cards = document.querySelector('.cards');
-const deck = document.querySelector('.deck');
-const burned = document.querySelector('.burned');
-const played = document.querySelector('.played');
+
+const gamePrompt = document.querySelector('[data-component="game-prompt"]');
+const startGame = gamePrompt.querySelector('[data-component-bind="start-game"]');
+const joinGame = gamePrompt.querySelector('[data-component-bind="join-game"]');
+const username = gamePrompt.querySelector('[data-component-bind="username"]');
+const gameContainer = document.querySelector('[data-component="game-container"]');
 
 startGame.addEventListener('click', function () {
-  socket.emit('start-game');
+  console.log(username.value);
+  socket.emit('start-game',
+    { name: username.value },
+    function (data) {
+      gameContainer.style.display = 'block';
+      console.log(data);
+    });
 });
 
-drawCard.addEventListener('click', function () {
-  console.log('clicked draw');
-  socket.emit('draw-card');
-});
 
-playCard.addEventListener('click', function () {
-  const card = cards.querySelector('input[name="cards"]:checked').value;
-  console.log('play card: ', card);
-  socket.emit('play-card', card);
-});
-
-socket.on('socketID', function (data) {
-  socketId.innerHTML = data;
-  console.log(`socket id: ${data}`);
-});
-
-socket.on('update', function (state) {
-  console.log(state);
-  connectedPlayers.innerHTML = '';
-  cards.innerHTML = '';
-  deck.innerHTML = '';
-  burned.innerHTML = '';
-  played.innerHTML = '';
-
-  state.players.forEach(player => {
-    connectedPlayers.innerHTML += `<li>${player}</li>`;
-  });
-  state.cards.forEach(card => {
-    cards.innerHTML += `<input type=radio name="cards" id="${card}" value="${card}"/><label for="${card}">${card}</label>`;
-  });
-  state.deck.forEach(card => {
-    deck.innerHTML += `<li>${card}</li>`;
-  });
-  state.burned.forEach(card => {
-    burned.innerHTML += `<li>${card}</li>`;
-  });
-  state.played.forEach(card => {
-    played.innerHTML += `<li>${card}</li>`;
-  });
-});
+events.init(socket);
+view.init(socket);

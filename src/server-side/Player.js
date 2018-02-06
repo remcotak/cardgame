@@ -1,7 +1,8 @@
 const Constants = require('../shared/Constants');
 
-function Player(socket) {
+function Player(socket, name) {
   this.socket = socket;
+  this.name = name;
   this.cards = [];
 };
 

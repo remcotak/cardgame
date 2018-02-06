@@ -63,8 +63,8 @@ Game.prototype.sendState = function () {
 };
 
 // Add a new player object with the clients socket information
-Game.prototype.addNewPlayer = function (socket) {
-  this.players[socket.id] = new Player(socket);
+Game.prototype.addNewPlayer = function (socket, name) {
+  this.players[socket.id] = new Player(socket, name);
   // Draw first card
   this.drawCard(socket.id);
   this.sendState();
