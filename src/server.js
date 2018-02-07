@@ -9,11 +9,17 @@ const Constants = require('./shared/Constants');
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
-const hashids = new Hashids('', 5);
-let gamesCount = 0;
+const hashids = new Hashids();
 const games = {};
 
+// Generate hash from unix timestamp
+const generateHash = () => {
+  const unix = Date.parse(new Date());
+  return hashids.encode(unix);
+}
+
 app.set('port', 3000);
+// Serve files from dist folder
 app.use(express.static('./dist'));
 // Starts the server.
 server.listen(3000, function () {
@@ -28,8 +34,7 @@ io.on('connection', function (socket) {
   // Start new game
   socket.on('new-game', function (data, callback) {
     // Create hashid for reference to the game
-    const id = hashids.encode(gamesCount)
-    gamesCount += 1;
+    const id = generateHash();
     // Create new Game with the given hashid
     games[id] = new Game(id);
     // Add the new player to the current game

@@ -51,7 +51,7 @@ joinGame.addEventListener('click', function () {
         return;
       }
       // set gameId variable
-      setGameId(data.gameId);
+      setGameId(gameIdInput.value);
       gamePrompt.style.display = 'none';
       gameContainer.style.display = 'block';
     }
