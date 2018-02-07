@@ -1,18 +1,21 @@
+let gameId;
 const events = {
   init: (socket) => {
     const drawCard = document.querySelector('[data-component="draw-card"]');
     const playCard = document.querySelector('[data-component="play-card"]');
+    const cards = document.querySelector('.cards');
 
     drawCard.addEventListener('click', function () {
-      console.log('clicked draw');
-      socket.emit('draw-card');
+      socket.emit('draw-card', { gameId: gameId });
     });
 
     playCard.addEventListener('click', function () {
       const card = cards.querySelector('input[name="cards"]:checked').value;
-      console.log('play card: ', card);
-      socket.emit('play-card', card);
+      socket.emit('play-card', { gameId: gameId, card: card });
     });
+  },
+  setGameId: (id) => {
+    gameId = id;
   },
 };
 

@@ -1,7 +1,6 @@
 const Constants = require('../shared/Constants');
 
-function Player(socket, name) {
-  this.socket = socket;
+function Player(name) {
   this.name = name;
   this.cards = [];
 };
@@ -16,7 +15,6 @@ Player.prototype.removeCard = function (card) {
 }
 
 Player.prototype.hasCard = function (card) {
-  console.log(this.cards);
   return this.cards.includes(card);
 }
 

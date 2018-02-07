@@ -9,13 +9,22 @@
   </head>
   <body>
     <div class="prompt"  data-component="game-prompt">
-      <input type="text" name="username" placeholder="Username" data-component-bind="username"/>
-      <button data-component-bind="start-game">Start new game</button>
-      <button data-component-bind="join-game">Join game</button>
+      <div>
+        <input type="text" name="username" placeholder="Username" data-component-bind="username"/>
+      </div>
+      <div>
+        <input type="text" name="username" placeholder="Room code" data-component-bind="game-id"/>
+        <button data-component-bind="join-game">Join game</button>
+      </div>
+      or
+      <br>
+      <button data-component-bind="new-game">Start new game</button>
+      <div class="error-message" data-component-bind="connect-error"></div>
     </div>
     <div class="game-container" data-component="game-container">
-      <h1 class="header__title">Cardgame</h1>
-      <div><button data-component="start-game">Start game</button></div>
+      <h1>Welcome, <span data-component-bind="username"></span></h1>
+      <h2 class="room"></h2>
+
       <button data-component="draw-card">Draw card</button>
       <button data-component="play-card">Play card</button>
     
@@ -23,7 +32,7 @@
       <div class="socket-id"></div>
 
       <h3>Connected players:</h3>
-      <ul class="connected"></ul>
+      <ul data-component-bind="player-list"></ul>
 
       <h3>Player's hand:</h3>
       <div class="cards"></div>

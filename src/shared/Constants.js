@@ -37,4 +37,8 @@ Constants.cards = {
 
 Constants.maxCards = 2;
 
+Constants.errors = {
+  'no-game': 'No room could be found with the given room code',
+}
+
 module.exports = Constants;

@@ -1,29 +1,41 @@
+let gameId;
 const view = {
   init: (socket) => {
-    const connectedPlayers = document.querySelector('.connected');
-    const cards = document.querySelector('.cards');
-    const deck = document.querySelector('.deck');
-    const burned = document.querySelector('.burned');
-    const played = document.querySelector('.played');
-    const socketId = document.querySelector('.socket-id');
+    const component = document.querySelector('[data-component="game-container"]');
+
+    if (!component) { return; }
+
+    const username = component.querySelector('[data-component-bind="username"]');
+    const room = component.querySelector('.room');
+    const playerList = component.querySelector('[data-component-bind="player-list"]');
+    const cards = component.querySelector('.cards');
+    const deck = component.querySelector('.deck');
+    const burned = component.querySelector('.burned');
+    const played = component.querySelector('.played');
+    const socketId = component.querySelector('.socket-id');
 
     socket.on('socketID', function (data) {
       socketId.innerHTML = data;
-      console.log(`socket id: ${data}`);
+      console.log(`Connected with id: ${data}`);
     });
 
     socket.on('update', function (state) {
       console.log(state);
-      connectedPlayers.innerHTML = '';
+      username.innerHTML = '';
+      room.innerHTML = '';
+      playerList.innerHTML = '';
       cards.innerHTML = '';
       deck.innerHTML = '';
       burned.innerHTML = '';
       played.innerHTML = '';
 
+      username.innerHTML = `${state.player.name}`;
+      room.innerHTML = `Room: ${state.gameId}`;
+
       state.players.forEach(player => {
-        connectedPlayers.innerHTML += `<li>${player}</li>`;
+        playerList.innerHTML += `<li>${player}</li>`;
       });
-      state.cards.forEach(card => {
+      state.player.cards.forEach(card => {
         cards.innerHTML += `<input type=radio name="cards" id="${card}" value="${card}"/><label for="${card}">${card}</label>`;
       });
       state.deck.forEach(card => {
@@ -36,6 +48,9 @@ const view = {
         played.innerHTML += `<li>${card}</li>`;
       });
     });
+  },
+  setGameId: (id) => {
+    gameId = id;
   },
 };
 

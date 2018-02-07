@@ -2,7 +2,7 @@
   "name": "cardgame",
   "version": "0.0.1",
   "description": "Multiplayer cardgame",
-  "main": "app.js",
+  "main": "client.js",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -19,8 +19,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --open --config webpack.dev.js",
     "watch": "webpack --watch --config webpack.dev.js",
+    "start": "node ./src/server.js",
+    "dev": "webpack-dev-server --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
   "author": "Remco Tak",

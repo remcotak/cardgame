@@ -1,7 +1,9 @@
 const Constants = require('../shared/Constants');
 const Player = require('./Player');
 
-function Game() {
+function Game(id) {
+  this.id = id;
+  this.clients = {};
   this.players = {};
   this.deck = this.buildDeck();
   this.burned = [this.withdrawCard()];
@@ -36,7 +38,6 @@ Game.prototype.drawCard = function (id) {
 
 // Play card from players hand
 Game.prototype.playCard = function (id, card) {
-  console.log(this.players[id].hasCard(card));
   // Check if the player has the given card in hand
   if (!this.players[id].hasCard(card)) { return; }
   // Remove the card from the players hand
@@ -52,19 +53,23 @@ Game.prototype.sendState = function () {
 
   Object.keys(this.players).forEach((key) => {
     const player = this.players[key];
-    player.socket.emit('update', {
+    const client = this.clients[key];
+
+    client.emit('update', {
+      gameId: this.id,
       players: playerIds,
       deck: this.deck,
       burned: this.burned,
       played: this.played,
-      cards: player.cards
+      player: player
     });
   });
 };
 
 // Add a new player object with the clients socket information
 Game.prototype.addNewPlayer = function (socket, name) {
-  this.players[socket.id] = new Player(socket, name);
+  this.clients[socket.id] = socket;
+  this.players[socket.id] = new Player(name);
   // Draw first card
   this.drawCard(socket.id);
   this.sendState();
