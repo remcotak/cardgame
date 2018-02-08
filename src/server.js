@@ -67,7 +67,6 @@ io.on('connection', function (socket) {
     games[data.gameId].startGame();
   });
 
-  // ==== MOVE THESE FUNCTIONS TO THE PLAYER OBJECT ====
   // Draw card from deck for the player
   socket.on('draw-card', function (data) {
     games[data.gameId].drawCard(socket.id);
@@ -83,6 +82,16 @@ io.on('connection', function (socket) {
   // When a player disconnects, remove them from the game.
   socket.on('disconnect', function () {
     console.log(`Client disconnected with id: ${socket.id}`);
-    // game.removePlayer(socket.id);
+    // Inefficient way for removing a player,
+    // when games object has a lot of items
+    // this will take some computing power
+    Object.keys(games).forEach((gameId) => {
+      games[gameId].removePlayer({
+        socketId: socket.id,
+        callback: function (data) {
+          delete games[gameId];
+        }
+      });
+    });
   });
 });

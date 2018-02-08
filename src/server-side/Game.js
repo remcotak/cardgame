@@ -110,8 +110,16 @@ Game.prototype.addNewPlayer = function (socket, name) {
 };
 
 // Remove player from the player object
-Game.prototype.removePlayer = function (id) {
-  this.players.delete(id);
+Game.prototype.removePlayer = function (data) {
+  // If the game has a player with the given socket id,
+  // remove it from the game
+  if (!this.players.has(data.socketId)) { return; }
+  this.players.delete(data.socketId);
+
+  // If the game has no players left,
+  // fire the callback function that will remove the entire game object
+  if (this.players.size !== 0) { return; }
+  data.callback();
 };
 
 module.exports = Game;
