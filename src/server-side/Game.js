@@ -52,11 +52,13 @@ Game.prototype.orderPlayers = function (firstPlayerIndex) {
 // starting with a randomly picked player
 Game.prototype.startGame = function () {
   this.orderPlayers(this.pickRandomPlayer());
-
+  // For each player draw a card
   this.orderedPlayers.forEach((player => {
     this.drawCard(player.id);
   }));
+  // Burn 1 card
   this.burned.push(this.withdrawCard());
+  // Draw 2nd card for the starting player
   this.drawCard(this.orderedPlayers[0].id);
 
   this.sendState();
