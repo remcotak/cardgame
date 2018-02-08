@@ -14,9 +14,10 @@
       </div>
       <div>
         <input type="text" name="username" placeholder="Room code" data-component-bind="game-id"/>
+        <br>
         <button data-component-bind="join-game">Join game</button>
       </div>
-      or
+      <br>
       <br>
       <button data-component-bind="new-game">Start new game</button>
       <div class="error-message" data-component-bind="connect-error"></div>
@@ -24,7 +25,9 @@
     <div class="game-container" data-component="game-container">
       <h1>Welcome, <span data-component-bind="username"></span></h1>
       <h2 class="room"></h2>
-
+      <div>
+        <button data-component="start-game">Start game</button>
+      </div>
       <button data-component="draw-card">Draw card</button>
       <button data-component="play-card">Play card</button>
     

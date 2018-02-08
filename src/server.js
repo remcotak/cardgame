@@ -31,14 +31,14 @@ io.on('connection', function (socket) {
   console.log(`Client connected with id: ${socket.id}`);
   socket.emit('socketID', socket.id);
 
-  // Start new game
+  // Create new game
   socket.on('new-game', function (data, callback) {
     // Create hashid for reference to the game
     const id = generateHash();
     // Create new Game with the given hashid
     games[id] = new Game(id);
     // Add the new player to the current game
-    games[id].addNewPlayer(socket, data.name);
+    games[id].addNewPlayer(socket, { id: socket.id, name: data.name, leader: true });
     // Send game information to the client
     games[id].sendState();
     // Fire callback to let the client know the game has been created
@@ -54,13 +54,20 @@ io.on('connection', function (socket) {
     }
 
     // Add the new player to the selected game room
-    games[data.gameId].addNewPlayer(socket, data.name);
+    games[data.gameId].addNewPlayer(socket, { id: socket.id, name: data.name });
     // Fire callback to let the client know the game has been joined
     callback();
     // Send game information to the connected clients
     games[data.gameId].sendState();
   });
 
+  // Start the game
+  socket.on('start-game', function (data) {
+    if (!games[data.gameId]) { return; }
+    games[data.gameId].startGame();
+  });
+
+  // ==== MOVE THESE FUNCTIONS TO THE PLAYER OBJECT ====
   // Draw card from deck for the player
   socket.on('draw-card', function (data) {
     games[data.gameId].drawCard(socket.id);

@@ -27,7 +27,7 @@ newGame.addEventListener('click', function () {
       setGameId(data.gameId);
       gamePrompt.style.display = 'none';
       gameContainer.style.display = 'block';
-    })
+    });
 });
 
 joinGame.addEventListener('click', function () {

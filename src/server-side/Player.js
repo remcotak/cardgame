@@ -1,7 +1,9 @@
 const Constants = require('../shared/Constants');
 
-function Player(name) {
-  this.name = name;
+function Player(data) {
+  this.id = data.id;
+  this.name = data.name;
+  this.leader = data.leader ? data.leader : false;
   this.cards = [];
 };
 

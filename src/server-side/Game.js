@@ -3,8 +3,10 @@ const Player = require('./Player');
 
 function Game(id) {
   this.id = id;
-  this.clients = {};
-  this.players = {};
+  this.clients = new Map();
+  this.players = new Map();
+  this.orderedPlayers = [];
+
   this.deck = this.buildDeck();
   this.burned = [this.withdrawCard()];
   this.played = [];
@@ -28,36 +30,67 @@ Game.prototype.withdrawCard = function () {
   return this.deck.splice([Math.floor(Math.random() * this.deck.length)], 1)[0];
 }
 
-// Draw a card from the deck and put it in the players hand
-Game.prototype.drawCard = function (id) {
-  // Check if the player can draw any more cards
-  if (!this.players[id].canDraw()) { return; }
-  // Add the drawn card to the players hand
-  return this.players[id].addCard(this.withdrawCard());
+// Pick starting player randomly
+Game.prototype.pickRandomPlayer = function () {
+  return Math.floor(Math.random() * this.players.size);
+};
+
+// Order players based on the picked starter player
+Game.prototype.orderPlayers = function (firstPlayerIndex) {
+  let players = [];
+
+  this.players.forEach((player) => {
+    players.push(player);
+  });
+
+  const firstPlayers = players.slice(firstPlayerIndex, players.length);
+  const restplayers = players.slice(0, firstPlayerIndex);
+  this.orderedPlayers = [...firstPlayers, ...restplayers];
+};
+
+// Start the game by dealing each player 1 card,
+// starting with a randomly picked player
+Game.prototype.startGame = function () {
+  this.orderPlayers(this.pickRandomPlayer());
+
+  this.orderedPlayers.forEach((player => {
+    this.drawCard(player.id);
+  }));
+
+  this.sendState();
 };
 
 // Play card from players hand
 Game.prototype.playCard = function (id, card) {
   // Check if the player has the given card in hand
-  if (!this.players[id].hasCard(card)) { return; }
+  if (!this.players.get(id).hasCard(card)) { return; }
   // Remove the card from the players hand
-  this.players[id].removeCard(card);
+  this.players.get(id).removeCard(card);
   // Add the card to the played pile
   this.played.push(card);
 };
 
+// Draw a card from the deck and put it in the players hand
+Game.prototype.drawCard = function (id) {
+  // Check if the player can draw any more cards
+  if (!this.players.get(id).canDraw()) { return; }
+  // Add the drawn card to the players hand
+  this.players.get(id).addCard(this.withdrawCard());
+};
+
 // Send the state to each individual client
 Game.prototype.sendState = function () {
-  const playerIds = Object.keys(this.players).map(key => key);
-  console.log(playerIds);
+  const playerNames = [];
+  this.players.forEach((player) => {
+    playerNames.push(player.name);
+  });
 
-  Object.keys(this.players).forEach((key) => {
-    const player = this.players[key];
-    const client = this.clients[key];
+  this.players.forEach((player) => {
+    const client = this.clients.get(player.id);
 
     client.emit('update', {
       gameId: this.id,
-      players: playerIds,
+      players: playerNames,
       deck: this.deck,
       burned: this.burned,
       played: this.played,
@@ -68,16 +101,13 @@ Game.prototype.sendState = function () {
 
 // Add a new player object with the clients socket information
 Game.prototype.addNewPlayer = function (socket, name) {
-  this.clients[socket.id] = socket;
-  this.players[socket.id] = new Player(name);
-  // Draw first card
-  this.drawCard(socket.id);
-  this.sendState();
+  this.clients.set(socket.id, socket);
+  this.players.set(socket.id, new Player(name))
 };
 
 // Remove player from the player object
 Game.prototype.removePlayer = function (id) {
-  delete this.players[id];
+  this.players.delete(id);
 };
 
 module.exports = Game;
