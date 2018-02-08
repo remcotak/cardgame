@@ -16,7 +16,9 @@ const events = {
     });
 
     startGame.addEventListener('click', function () {
-      socket.emit('start-game', { gameId: gameId });
+      socket.emit('start-game', { gameId: gameId }, function () {
+        startGame.style.display = 'none';
+      });
     });
   },
   setGameId: (id) => {
