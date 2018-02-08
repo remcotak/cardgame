@@ -8,7 +8,7 @@ function Game(id) {
   this.orderedPlayers = [];
 
   this.deck = this.buildDeck();
-  this.burned = [this.withdrawCard()];
+  this.burned = [];
   this.played = [];
 }
 
@@ -56,6 +56,8 @@ Game.prototype.startGame = function () {
   this.orderedPlayers.forEach((player => {
     this.drawCard(player.id);
   }));
+  this.burned.push(this.withdrawCard());
+  this.drawCard(this.orderedPlayers[0].id);
 
   this.sendState();
 };
