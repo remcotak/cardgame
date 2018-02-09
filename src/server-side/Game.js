@@ -5,7 +5,9 @@ function Game(id) {
   this.id = id;
   this.clients = new Map();
   this.players = new Map();
+  this.hasStarted = false;
   this.orderedPlayers = [];
+  this.currentPlayer = [];
 
   this.deck = this.buildDeck();
   this.burned = [];
@@ -51,6 +53,7 @@ Game.prototype.orderPlayers = function (firstPlayerIndex) {
 // Start the game by dealing each player 1 card,
 // starting with a randomly picked player
 Game.prototype.startGame = function () {
+  this.hasStarted = true;
   this.orderPlayers(this.pickRandomPlayer());
   // For each player draw a card
   this.orderedPlayers.forEach((player => {
@@ -58,6 +61,8 @@ Game.prototype.startGame = function () {
   }));
   // Burn 1 card
   this.burned.push(this.withdrawCard());
+  // Set starting player
+  this.currentPlayer = this.orderedPlayers[0];
   // Draw 2nd card for the starting player
   this.drawCard(this.orderedPlayers[0].id);
 
@@ -88,17 +93,21 @@ Game.prototype.sendState = function () {
   this.players.forEach((player) => {
     playerNames.push(player.name);
   });
+  let playersTurn = this.hasStarted ? this.currentPlayer.name : [];
 
   this.players.forEach((player) => {
+    playersTurn = player.name === playersTurn ? true : playersTurn;
+    console.log(playersTurn);
     const client = this.clients.get(player.id);
 
     client.emit('update', {
       gameId: this.id,
-      players: playerNames,
       deck: this.deck,
       burned: this.burned,
       played: this.played,
-      player: player
+      playerNames,
+      player,
+      playersTurn
     });
   });
 };

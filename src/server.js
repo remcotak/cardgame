@@ -26,6 +26,7 @@ app.use(express.static('./dist'));
 server.listen(port, function () {
   console.log(`Starting server on port ${port}`);
 });
+
 // Add the WebSocket handlers
 io.on('connection', function (socket) {
   console.log(`Client connected with id: ${socket.id}`);
@@ -52,7 +53,6 @@ io.on('connection', function (socket) {
       // return an error message when no game has been found
       return callback({ 'error': Constants.errors['no-game'] });
     }
-
     // Add the new player to the selected game room
     games[data.gameId].addNewPlayer(socket, { id: socket.id, name: data.name });
     // Fire callback to let the client know the game has been joined
@@ -67,12 +67,6 @@ io.on('connection', function (socket) {
     games[data.gameId].startGame();
     // Fire callback that the game has started
     callback();
-  });
-
-  // Draw card from deck for the player
-  socket.on('draw-card', function (data) {
-    games[data.gameId].drawCard(socket.id);
-    games[data.gameId].sendState();
   });
 
   // Play card from hand of the player

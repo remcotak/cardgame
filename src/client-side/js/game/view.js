@@ -13,6 +13,7 @@ const view = {
     const burned = component.querySelector('.burned');
     const played = component.querySelector('.played');
     const socketId = component.querySelector('.socket-id');
+    const playCard = document.querySelector('[data-component="play-card"]');
 
     socket.on('socketID', function (data) {
       socketId.innerHTML = data;
@@ -32,7 +33,11 @@ const view = {
       username.innerHTML = `${state.player.name}`;
       room.innerHTML = `Room: ${state.gameId}`;
 
-      state.players.forEach(player => {
+      if (state.playersTurn === true) {
+        playCard.style.display = 'block';
+      }
+
+      state.playerNames.forEach(player => {
         playerList.innerHTML += `<li>${player}</li>`;
       });
       state.player.cards.forEach(card => {
