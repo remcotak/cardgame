@@ -33,9 +33,9 @@ When production use:
 This application is still a work-in-progress and not yet playable.
 
 ### Features
-*~~ Players can create a game ~~
-*~~ Players scan join an existing game ~~
-*~~ Players can start a game ~~
-*~~ Players can play the game using game logic ~~
-*~~ Players can win the game ~~
-*~~ Players can reset the game ~~
+* ~~Players can create a game~~
+* ~~Players scan join an existing game~~
+* ~~Players can start a game~~
+* ~~Players can play the game using game logic~~
+* ~~Players can win the game~~
+* ~~Players can reset the game~~
