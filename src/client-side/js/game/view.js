@@ -5,18 +5,17 @@ const view = {
 
     if (!component) { return; }
 
+    const startGame = component.querySelector('[data-component-bind="start-game"]');
     const username = component.querySelector('[data-component-bind="username"]');
-    const room = component.querySelector('.room');
     const playerList = component.querySelector('[data-component-bind="player-list"]');
-    const cards = component.querySelector('.cards');
+    const cards = component.querySelector('[data-component-bind="player-cards"]');
+    const playCard = document.querySelector('[data-component-bind="play-card"]');
+    const room = component.querySelector('.room');
     const deck = component.querySelector('.deck');
     const burned = component.querySelector('.burned');
     const played = component.querySelector('.played');
-    const socketId = component.querySelector('.socket-id');
-    const playCard = document.querySelector('[data-component="play-card"]');
 
     socket.on('socketID', function (data) {
-      socketId.innerHTML = data;
       console.log(`Connected with id: ${data}`);
     });
 
@@ -33,15 +32,24 @@ const view = {
       username.innerHTML = `${state.player.name}`;
       room.innerHTML = `Room: ${state.gameId}`;
 
+      if (state.player.leader) {
+        startGame.style.display = 'block';
+      }
+
+      if (state.gameStarted) {
+        startGame.style.display = 'none';
+      }
+
       if (state.playersTurn === true) {
         playCard.style.display = 'block';
       }
 
       state.playerNames.forEach(player => {
-        playerList.innerHTML += `<li>${player}</li>`;
+        playerList.innerHTML += `<input type=radio name="players" id="${player}" value="${player}"/><label for="${player}">${player}</label>`;
       });
-      state.player.cards.forEach(card => {
-        cards.innerHTML += `<input type=radio name="cards" id="${card}" value="${card}"/><label for="${card}">${card}</label>`;
+      state.player.cards.forEach((card, index) => {
+        const reference = `${card}_${index}`;
+        cards.innerHTML += `<input type=radio name="cards" id="${reference}" value="${card}"/><label for="${reference}">${card}</label>`;
       });
       state.deck.forEach(card => {
         deck.innerHTML += `<li>${card}</li>`;

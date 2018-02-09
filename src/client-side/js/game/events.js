@@ -1,14 +1,17 @@
 let gameId;
 const events = {
   init: (socket) => {
-    const cards = document.querySelector('.cards');
-    const playCard = document.querySelector('[data-component="play-card"]');
-    const startGame = document.querySelector('[data-component="start-game"]');
+    const component = document.querySelector('[data-component="game-container"]');
+
+    if (!component) { return; }
+
+    const startGame = component.querySelector('[data-component-bind="start-game"]');
+    const cards = component.querySelector('[data-component-bind="player-cards"]');
+    const playerList = component.querySelector('[data-component-bind="player-list"]');
+    const playCard = component.querySelector('[data-component-bind="play-card"]');
 
     startGame.addEventListener('click', function () {
-      socket.emit('start-game', { gameId: gameId }, function () {
-        startGame.style.display = 'none';
-      });
+      socket.emit('start-game', { gameId: gameId });
     });
 
     cards.addEventListener('change', function () {

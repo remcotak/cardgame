@@ -62,11 +62,9 @@ io.on('connection', function (socket) {
   });
 
   // Start the game
-  socket.on('start-game', function (data, callback) {
+  socket.on('start-game', function (data) {
     if (!games[data.gameId]) { return; }
     games[data.gameId].startGame();
-    // Fire callback that the game has started
-    callback();
   });
 
   // Play card from hand of the player

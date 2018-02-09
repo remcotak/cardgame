@@ -96,8 +96,9 @@ Game.prototype.sendState = function () {
   let playersTurn = this.hasStarted ? this.currentPlayer.name : [];
 
   this.players.forEach((player) => {
+    // If current players turn, make value true,
+    // else make it the name of the player that has the turn
     playersTurn = player.name === playersTurn ? true : playersTurn;
-    console.log(playersTurn);
     const client = this.clients.get(player.id);
 
     client.emit('update', {
@@ -105,6 +106,7 @@ Game.prototype.sendState = function () {
       deck: this.deck,
       burned: this.burned,
       played: this.played,
+      gameStarted: this.hasStarted,
       playerNames,
       player,
       playersTurn

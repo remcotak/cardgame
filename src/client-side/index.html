@@ -26,18 +26,15 @@
       <h1>Welcome, <span data-component-bind="username"></span></h1>
       <h2 class="room"></h2>
       <div>
-        <button data-component="start-game">Start game</button>
+        <button data-component-bind="start-game" style="display: none;">Start game</button>
       </div>
-      <button data-component="play-card" style="display: none;" disabled>Play card</button>
-    
-      <h3>Connected as:</h3>
-      <div class="socket-id"></div>
+      <button data-component-bind="play-card" style="display: none;" disabled>Play card</button>
 
       <h3>Connected players:</h3>
-      <ul data-component-bind="player-list"></ul>
+      <div data-component-bind="player-list"></div>
 
       <h3>Player's hand:</h3>
-      <div class="cards"></div>
+      <div data-component-bind="player-cards"></div>
 
       <h3>Game Deck:</h3>
       <ul class="deck"></ul>
