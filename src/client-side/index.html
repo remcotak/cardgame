@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Cardgame</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <div class="prompt"  data-component="game-prompt">
+      <div>
+        <input type="text" name="username" placeholder="Username" data-component-bind="username"/>
+      </div>
+      <div>
+        <input type="text" name="username" placeholder="Room code" data-component-bind="game-id"/>
+        <br>
+        <button data-component-bind="join-game">Join game</button>
+      </div>
+      <br>
+      <br>
+      <button data-component-bind="new-game">Start new game</button>
+      <div class="error-message" data-component-bind="connect-error"></div>
+    </div>
+    <div class="game-container" data-component="game-container">
+      <h1>Welcome, <span data-component-bind="username"></span></h1>
+      <h2 class="room"></h2>
+      <div>
+        <button data-component="start-game">Start game</button>
+      </div>
+      <button data-component="draw-card">Draw card</button>
+      <button data-component="play-card">Play card</button>
+    
+      <h3>Connected as:</h3>
+      <div class="socket-id"></div>
+
+      <h3>Connected players:</h3>
+      <ul data-component-bind="player-list"></ul>
+
+      <h3>Player's hand:</h3>
+      <div class="cards"></div>
+
+      <h3>Game Deck:</h3>
+      <ul class="deck"></ul>
+
+      <h3>Burned:</h3>
+      <ul class="burned"></ul>
+
+      <h3>Played:</h3>
+      <ul class="played"></ul>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+  </body>
+</html>
