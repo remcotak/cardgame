@@ -9,6 +9,7 @@ const Constants = require('./shared/Constants');
 const app = express();
 const server = http.Server(app);
 const io = socketIO(server);
+const port = process.env.PORT || 3000;
 const hashids = new Hashids();
 const games = {};
 
@@ -18,14 +19,13 @@ const generateHash = () => {
   return hashids.encode(unix);
 }
 
-app.set('port', 3000);
+app.set('port', port);
 // Serve files from dist folder
 app.use(express.static('./dist'));
 // Starts the server.
-server.listen(3000, function () {
-  console.log('Starting server on port 3000');
+server.listen(port, function () {
+  console.log(`Starting server on port ${port}`);
 });
-
 // Add the WebSocket handlers
 io.on('connection', function (socket) {
   console.log(`Client connected with id: ${socket.id}`);
